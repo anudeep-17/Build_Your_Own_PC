@@ -458,6 +458,7 @@ public class bit_test
 		System.out.println("-----------------------------------------BIT CLASS TESTING -----------------------------------------------------");
 		System.out.println();
 		runTests();
+		
 	}
 	
 	
