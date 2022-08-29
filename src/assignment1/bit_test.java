@@ -117,6 +117,7 @@ public class bit_test
 	
 	
 	
+	
 	//clear method testing here
 	
 	public static void clear_test()
