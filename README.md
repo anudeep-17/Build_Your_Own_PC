@@ -1,6 +1,5 @@
-# Assignment1
+# Assignment2
 
 TODO:
-1. check with professor about exceptions
-2. comment out the methods
-3. one last check of the run and submission.
+-- initial understanding going on --
+//deadling SEPT 4 @11:59pm
