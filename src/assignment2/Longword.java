@@ -58,7 +58,7 @@ public class Longword
 		return returner;
 	}
 	
-	Longword not(Longword Other)
+	Longword not()
 	{
 		Longword returner = new Longword();
 		
@@ -114,7 +114,14 @@ public class Longword
 		String returner = "";
 		for(int i = 0; i<32; i++)
 		{
-			returner += longword[i]+",";
+			if(i == 31)
+			{
+				returner += longword[i].toString()+" ";
+			}
+			else
+			{
+				returner += longword[i].toString()+", ";
+			}
 		}
 		return returner;
 	}
@@ -122,8 +129,9 @@ public class Longword
 	long getunsigned()
 	{
 		long returner = 0;
+		int j = 0; 
 		
-		for(int i = 0; i<32; i++)
+		for(int i = 31; i > 0; i--)
 		{
 			int tracker = 0;
 			
@@ -136,7 +144,8 @@ public class Longword
 				tracker = 0;
 			}
 			
-			returner += tracker*Math.pow(2, i);
+			returner += tracker*Math.pow(2, j);
+			j++;
 		}
 		return returner;
 	}
@@ -144,8 +153,9 @@ public class Longword
 	int getsigned()
 	{
 		int returner = 0;
+		int j = 0; 
 		
-		for(int i = 0; i<32; i++)
+		for(int i = 31; i > 0; i--)
 		{
 			int tracker = 0;
 			
@@ -158,7 +168,8 @@ public class Longword
 				tracker = 0;
 			}
 			
-			returner += tracker*Math.pow(2, i);
+			returner += tracker*Math.pow(2, j);
+			j++;
 		}
 		return returner;
 	}
@@ -175,25 +186,21 @@ public class Longword
 	
 	void set(int value)
 	{
-		for(int i = 31; i>=0; i++)
+		int calculation = 0;
+		for(int i = 31; i >=0; i--)
 		{
-			int calculation = value%2;
-			if(calculation == 1)
-			{
-				longword[i] = new bit(true);
-			}
-			else
+			calculation = value%2;
+			if(calculation == 0)
 			{
 				longword[i] = new bit(false);
 			}
-				
-			
+			else
+			{
+				longword[i] = new bit(true);
+			}
+			value = value/2;
 		}
 	}
-	
-	
-	
-	
 	
 	
 
