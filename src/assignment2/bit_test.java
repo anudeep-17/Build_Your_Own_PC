@@ -544,13 +544,13 @@ public class bit_test
 	}
 	
 	//main method. 
-	public static void main(String[] args)
-	{
-		System.out.println("-----------------------------------------BIT CLASS TESTING -----------------------------------------------------");
-		System.out.println();
-		runTests(); // runTests the method with all the test methods will be called and will excecute all the methods to give the output of test.
-		
-	}
+//	public static void main(String[] args)
+//	{
+//		System.out.println("-----------------------------------------BIT CLASS TESTING -----------------------------------------------------");
+//		System.out.println();
+//		runTests(); // runTests the method with all the test methods will be called and will excecute all the methods to give the output of test.
+//		
+//	}
 	
 	
 	
