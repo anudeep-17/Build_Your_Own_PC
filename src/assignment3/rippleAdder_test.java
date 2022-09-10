@@ -89,6 +89,22 @@ public class rippleAdder_test
 		
 		
 		
+		tester.set(0);
+		tester_support.set(10);
+		
+		if(rippleAdder.add(tester,tester_support).getsigned() == 10)
+		{
+			System.out.print("given: "+ rippleAdder.add(tester,tester_support).getsigned()+ " expected: 10 -->");
+			System.out.println("Success");
+		}
+		else
+		{
+			System.out.print("given: "+ rippleAdder.add(tester,tester_support).getsigned()+ " expected: 10 -->");
+			System.out.println("failure");
+		}
+		
+		
+		
 		tester.set(1);
 		tester_support.set(1122);
 		
@@ -190,6 +206,23 @@ public class rippleAdder_test
 			System.out.print("given: "+ rippleAdder.sub(tester,tester_support).getsigned()+ " expected: 0 -->");
 			System.out.println("failure");
 		}
+		
+		
+		tester.set(0);
+		tester_support.set(10);
+		
+		if(rippleAdder.sub(tester,tester_support).getsigned() == -10)
+		{
+			System.out.print("given: "+ rippleAdder.sub(tester,tester_support).getsigned()+ " expected: -10 -->");
+			System.out.println("Success");
+		}
+		else
+		{
+			System.out.print("given: "+ rippleAdder.sub(tester,tester_support).getsigned()+ " expected: -10 -->");
+			System.out.println("failure");
+		}
+		
+		
 		
 		tester.set(1);
 		tester_support.set(1122);

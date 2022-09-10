@@ -299,18 +299,18 @@ public class Longword_test
 		
 		Longword tester = new Longword();
 		
-		tester.set(-6);
+		tester.set(-2147483647);
 
 		
 //		System.out.println(tester);
-		if(tester.getsigned() == -6)
+		if(tester.getsigned() == -2147483647)
 		{
-			System.out.println("unsigned value of given bits " + tester.getsigned() + "given : -6");
+			System.out.println("signed value of given bits " + tester.getsigned() + " given : -2147483647");
 			System.out.println("----> success");
 		}
 		else
 		{
-			System.out.println("get unsigned value of given bits " + tester.getsigned() + "given : -6");
+			System.out.println("get signed value of given bits " + tester.getsigned() + "given : -2147483647");
 			System.out.println("----> failure");
 		}
 		System.out.println("----------------------------------------------------signed testing done -----------------------------------------------------------------------------------");
