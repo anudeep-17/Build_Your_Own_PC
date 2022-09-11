@@ -56,7 +56,7 @@ public class rippleAdder
 		
 		for(int i = 31; i >= 0; i--) 
 		{
-			//when we add 1+1 in the bits it results 0 and carrys 1 like 11+1 = 110
+			//when we add 1+1 in the bits it results 0 and carries like 11+1 = 110
 			if(negated.getbit(i).getValue()) 
 			{
 				negated.setBit(i, new bit (false)); // until we see the true we set it to false and we break once it is false and we set it to true. 
