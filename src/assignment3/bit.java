@@ -1,4 +1,4 @@
-package assignment1;
+package assignment3;
 
 //class bit
 public class bit 

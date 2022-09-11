@@ -1,9 +1,6 @@
-# Assignment1
+# Assignment2
 
 TODO:
-1. check with professor about exceptions :x:
-2. comment out the methods:white_check_mark:
-3. one last check of the run and submission.:white_check_mark:
+-- initial understanding going on --
+//deadling SEPT 4 @11:59pm
 
----
-*assignment submitted in time !
