@@ -1,4 +1,4 @@
-package assignment2;
+package assignment3;
 
 public class Longword_test 
 {
@@ -299,18 +299,18 @@ public class Longword_test
 		
 		Longword tester = new Longword();
 		
-		tester.set(-2147483647);
+		tester.set(2147483647);
 
 		
 //		System.out.println(tester);
-		if(tester.getsigned() == -2147483647)
+		if(tester.getsigned() == 2147483647)
 		{
-			System.out.println("signed value of given bits " + tester.getsigned() + " given : -2147483647");
+			System.out.println("signed value of given bits " + tester.getsigned() + "given : 2147483647");
 			System.out.println("----> success");
 		}
 		else
 		{
-			System.out.println("get signed value of given bits " + tester.getsigned() + "given : -2147483647");
+			System.out.println("get unsigned value of given bits " + tester.getsigned() + "given : 2147483647");
 			System.out.println("----> failure");
 		}
 		System.out.println("----------------------------------------------------signed testing done -----------------------------------------------------------------------------------");
