@@ -16,7 +16,7 @@ public class bit
 	{
 		this.bitval = bit_val; //setting the bit object to the passed value
 	}
-	
+
 	
 	//set method : sets value of the bit 
 	void set(boolean value)
@@ -210,6 +210,20 @@ public class bit
 		{
 			return "f";
 		}
+	}
+	
+	
+	//new method -- used for ALU testing ***
+	public static bit[] arraybit(boolean bit_val1, boolean bit_val2, boolean bit_val3, boolean bit_val4)
+	{
+		bit[] bitarray = new bit[4];
+		
+		bitarray[0] = new bit(bit_val1);
+		bitarray[1] = new bit(bit_val2);
+		bitarray[2] = new bit(bit_val3);
+		bitarray[3] = new bit(bit_val4);
+		
+		return bitarray;
 	}
 	
 
