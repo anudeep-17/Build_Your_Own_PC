@@ -52,7 +52,7 @@ public class Mainrun
 		System.out.println("------------------------------------- multiplier test -----------------------------------");
 		
 		
-		//rippleadder test cases
+		//multiplier test cases
 		multiplier_test.runtests();
 		
 		System.out.println("--------------------------------------multiplier test dones-----------------------------------");
@@ -61,6 +61,21 @@ public class Mainrun
 		System.out.println();
 		System.out.println();
 		System.out.println();
+		
+		//ALU test cases
+		
+		System.out.println("-------------------------------------ALU test -----------------------------------");
+		Alu_test.runtests();
+		System.out.println("--------------------------------------Alu test dones-----------------------------------");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		
+		
+		
 		
 		
 		
