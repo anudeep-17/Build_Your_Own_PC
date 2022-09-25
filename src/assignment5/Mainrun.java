@@ -6,7 +6,7 @@ public class Mainrun
 	
 	
 	//*************************bunch of println's are added to make the diplay readable and more indented.
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 		System.out.println("--------------------------------------bit test -----------------------------------");
 		
@@ -67,6 +67,17 @@ public class Mainrun
 		System.out.println("-------------------------------------ALU test -----------------------------------");
 		Alu_test.runtests();
 		System.out.println("--------------------------------------Alu test dones-----------------------------------");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		//memory test cases
+		
+		System.out.println("-------------------------------------Memory test -----------------------------------");
+		memory_test.runtests();
+		System.out.println("--------------------------------------Memory test dones-----------------------------------");
 		System.out.println();
 		System.out.println();
 		System.out.println();

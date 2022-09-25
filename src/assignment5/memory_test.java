@@ -2,62 +2,25 @@ package assignment5;
 
 public class memory_test
 {
-	public static void memory_test()
+	public static void memory_test() throws Exception
 	{
-		Longword tester = new Longword();
-		Longword tester_address = new Longword();
+		//initializign the empty memory for the bit storage.
+		Memory initialize = new Memory();
 		
-		tester.set(10);
-		tester_address.set(0);
-		Memory.write(tester_address, tester);
-		
-		tester.set(11);
-		tester_address.set(5);
-		Memory.write(tester_address, tester);
-		
-		tester.set(12);
-		tester_address.set(10);
-		Memory.write(tester_address, tester);
-		
-		tester.set(13);
-		tester_address.set(15);
-		Memory.write(tester_address, tester);
-		
-		tester.set(14);
-		tester_address.set(20);
-		Memory.write(tester_address, tester);
-		
-		tester.set(15);
-		tester_address.set(25);
-		Memory.write(tester_address, tester);
-		
-		tester.set(16);
-		tester_address.set(30);
-		Memory.write(tester_address, tester);
-		
-		tester.set(17);
-		tester_address.set(35);
-		Memory.write(tester_address, tester);
-		
-		tester.set(18);
-		tester_address.set(40);
-		Memory.write(tester_address, tester);
-		
-		tester.set(19);
-		tester_address.set(45);
-		Memory.write(tester_address, tester);
-		
-		tester.set(20);
-		tester_address.set(50);
-		Memory.write(tester_address, tester);
-		
-		tester.set(25);
-		tester_address.set(55);
+		//test cases 
+		Memory.write(new Longword(0), new Longword(10)); //fills the 0 to 31 with 10 value 
+		Memory.write(new Longword(32), new Longword(11));//fills the 31 to 63 with 11 value 
+		Memory.write(new Longword(64), new Longword(12));//fills the 64 to 95 with 12 value 
+		Memory.write(new Longword(96), new Longword(13));//fills the 96 to 127 with 13 value 
+		Memory.write(new Longword(128), new Longword(14));//fills the 128 to 159 with 14 value 
+		Memory.write(new Longword(160), new Longword(15));//fills the 160 to 191 with 15 value 
+		Memory.write(new Longword(192), new Longword(16));//fills the 192 to 224 with 16 value 
 		
 		
-		//test
-		Memory.write(tester_address, tester);
 		
+		
+		
+		//if the bits from 0 return the signed value as what we wrote usign write then it is success else false
 		if(Memory.read(new Longword(0)).getsigned() == 10)
 		{
 			System.out.print("given : "+Memory.read(new Longword(0)).getsigned()+" expected: 10 "+ "-> ");
@@ -70,141 +33,94 @@ public class memory_test
 		}
 		
 		
-		
-		if(Memory.read(new Longword(5)).getsigned() == 11)
+		//if the bits from 0 return the signed value as what we wrote usign write then it is success else false
+		if(Memory.read(new Longword(32)).getsigned() == 11)
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(5)).getsigned()+" Expected: 11 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(32)).getsigned()+" Expected: 11 " + "-> ");
 			System.out.println("Success");
 		}
 		else
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(5)).getsigned()+" Expected: 11 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(32)).getsigned()+" Expected: 11 " + "-> ");
 			System.out.println("Failure");
 		}
 		
 		
-		
-		if(Memory.read(new Longword(10)).getsigned() == 12)
+		//if the bits from 0 return the signed value as what we wrote usign write then it is success else false
+		if(Memory.read(new Longword(64)).getsigned() == 12)
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(10)).getsigned()+" Expected: 12 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(64)).getsigned()+" Expected: 12 " + "-> ");
 			System.out.println("Success");
 		}
 		else
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(10)).getsigned()+" Expected: 12 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(64)).getsigned()+" Expected: 12 " + "-> ");
 			System.out.println("Failure");
 		}
 		
 		
-		
-		if(Memory.read(new Longword(15)).getsigned() == 13)
+		//if the bits from 0 return the signed value as what we wrote usign write then it is success else false
+		if(Memory.read(new Longword(96)).getsigned() == 13)
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(15)).getsigned()+" Expected: 13 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(96)).getsigned()+" Expected: 13 " + "-> ");
 			System.out.println("Success");
 		}
 		else
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(15)).getsigned()+" Expected: 13 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(96)).getsigned()+" Expected: 13 " + "-> ");
 			System.out.println("Failure");
 		}
 		
 		
-		
-		if(Memory.read(new Longword(20)).getsigned() == 14)
+		//if the bits from 0 return the signed value as what we wrote usign write then it is success else false
+		if(Memory.read(new Longword(128)).getsigned() == 14)
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(20)).getsigned()+" Expected: 14 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(128)).getsigned()+" Expected: 14 " + "-> ");
 			System.out.println("Success");
 		}
 		else
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(20)).getsigned()+" Expected: 14 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(128)).getsigned()+" Expected: 14 " + "-> ");
 			System.out.println("Failure");
 		}
 		
 		
-		
-		if(Memory.read(new Longword(25)).getsigned() == 15)
+		//if the bits from 0 return the signed value as what we wrote usign write then it is success else false
+		if(Memory.read(new Longword(160)).getsigned() == 15)
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(25)).getsigned()+" Expected: 15 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(160)).getsigned()+" Expected: 15 " + "-> ");
 			System.out.println("Success");
 		}
 		else
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(25)).getsigned()+" Expected: 15 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(160)).getsigned()+" Expected: 15 " + "-> ");
 			System.out.println("Failure");
 		}
 		
 		
-		
-		if(Memory.read(new Longword(30)).getsigned() == 16)
+		//if the bits from 0 return the signed value as what we wrote usign write then it is success else false
+		if(Memory.read(new Longword(192)).getsigned() == 16)
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(30)).getsigned()+" Expected: 16 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(192)).getsigned()+" Expected: 16 " + "-> ");
 			System.out.println("Success");
 		}
 		else
 		{
-			System.out.print( "given: "+ Memory.read(new Longword(30)).getsigned()+" Expected: 16 " + "-> ");
+			System.out.print( "given: "+ Memory.read(new Longword(192)).getsigned()+" Expected: 16 " + "-> ");
 			System.out.println("Failure");
 		}
-		
-
-		if(Memory.read(new Longword(35)).getsigned() == 17)
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(35)).getsigned()+" Expected: 17 " + "-> ");
-			System.out.println("Success");
-		}
-		else
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(35)).getsigned()+" Expected: 17 " + "-> ");
-			System.out.println("Failure");
-		}
-			
-		
-		if(Memory.read(new Longword(40)).getsigned() == 18)
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(40)).getsigned()+" Expected: 18 " + "-> ");
-			System.out.println("Success");
-		}
-		else
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(40)).getsigned()+" Expected: 18" + "-> ");
-			System.out.println("Failure");
-		}
-		
-		
-		if(Memory.read(new Longword(45)).getsigned() == 19)
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(45)).getsigned()+" Expected: 19 " + "-> ");
-			System.out.println("Success");
-		}
-		else
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(45)).getsigned()+" Expected: 19 " + "-> ");
-			System.out.println("Failure");
-		}
-		
-		
-		if(Memory.read(new Longword(50)).getsigned() == 20)
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(50)).getsigned()+" Expected: 20 " + "-> ");
-			System.out.println("Success");
-		}
-		else
-		{
-			System.out.print( "given: "+ Memory.read(new Longword(50)).getsigned()+" Expected: 20 " + "-> ");
-			System.out.println("Failure");
-		}
+	
 		
 	}
 
-	public static void runtests()
+	public static void runtests() throws Exception
 	{
 		memory_test();
 	}
 	
-	public static void main(String[] args)
-	{
-		runtests();
-	}
+//	public static void main(String[] args) throws Exception
+//	{
+//		runtests();
+//	}
 
 }
