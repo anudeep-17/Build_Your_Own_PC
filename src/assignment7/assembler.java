@@ -35,7 +35,7 @@ public class assembler
 	static String jump = "0011";
 	static String compare = "0100";
 	static String branch = "0101";
-	
+	static String stack = "0110";
 	
 	// global codes easy to parse and set according to the lexer
 	static String opcode_command = "";
@@ -138,7 +138,7 @@ public class assembler
 					
 					
 				case "compare":
-					convertforcompare(currinstruction);
+					convertforcompare(currinstruction); //call to fill the action or code_command
 					if(opcode_command.equals("")|| actioncode1.equals("")||actioncode2.equals("")) // if code and command are null then there is a missing variable halt the whole 
 					{
 						instruction[i] = "0000000000000000";//halt computer//halt computer
@@ -148,12 +148,12 @@ public class assembler
 						instruction[i] = opcode_command+"0000"+actioncode1 + actioncode2; // alter the instructions to send the binary 
 					}
 					break;
-					
+				//branch if == != > or >=
 				case "branchifequal":
 				case "branchifnotequal":
 				case "branchifgreater":
 				case "branchifgreaterthanequal":
-					convertforbranch(currinstruction);
+					convertforbranch(currinstruction);//call to fill the action or code_command
 					if(opcode_command.equals("")|| actioncode1.equals("")) // if code and command are null then there is a missing variable halt the whole 
 					{
 						instruction[i] = "0000000000000000";//halt computer//halt computer
@@ -164,7 +164,55 @@ public class assembler
 //						System.out.println("instruction of branch " + instruction[i]);
 					}
 					break;
-					
+				case "call":
+					convertforcall(currinstruction);//call to fill the action or code_command
+					if(opcode_command.equals("")|| actioncode1.equals("")) // if code and command are null then there is a missing variable halt the whole 
+					{
+						instruction[i] = "0000000000000000";//halt computer//halt computer
+					}
+					else
+					{
+						instruction[i] = opcode_command+actioncode1; // alter the instructions to send the binary 
+//						System.out.println("instruction of branch " + instruction[i]);
+					}
+					break;
+				case "push":
+					convertforpush(currinstruction);//call to fill the action or code_command
+					if(opcode_command.equals("")|| actioncode1.equals("")) // if code and command are null then there is a missing variable halt the whole 
+					{
+						instruction[i] = "0000000000000000";//halt computer//halt computer
+					}
+					else
+					{
+						instruction[i] = opcode_command+actioncode1; // alter the instructions to send the binary 
+//						System.out.println("instruction of branch " + instruction[i]);
+					}
+					break;
+				case "pop":
+					convertforpop(currinstruction);//call to fill the action or code_command
+					if(opcode_command.equals("")|| actioncode1.equals("")) // if code and command are null then there is a missing variable halt the whole 
+					{
+						instruction[i] = "0000000000000000";//halt computer//halt computer
+					}
+					else
+					{
+						instruction[i] = opcode_command+actioncode1; // alter the instructions to send the binary 
+//						System.out.println("instruction of branch " + instruction[i]);
+					}
+					break;
+				case "return":
+					convertforreturn(currinstruction);//call to fill the action or code_command
+					if(opcode_command.equals("")) // if code and command are null then there is a missing variable halt the whole 
+					{
+	
+						instruction[i] = "0000000000000000";//halt computer//halt computer
+					}
+					else
+					{
+						instruction[i] = opcode_command+actioncode1; // alter the instructions to send the binary 
+						System.out.println("instruction of return " + instruction[i]);
+					}
+					break;
 				default: 
 					System.out.println("non existatant operation asked....system stopped");
 					instruction[i] = "00000000000000000000000000000000"; //default halt for the end of the wrong of the given opcode
@@ -258,13 +306,14 @@ public class assembler
 		actioncode1 = converterfornumber(instructions[1]); //sets the binary of the number to complete the interrupt instruction.
 	}
 	
-	
+	//implements jump converter to fill the opcode and fills the action code with the number entered to jump
 	public static void convertforjump(String[] instruction)
 	{
 		opcode_command = jump;
 		actioncode1 = converterfornumber(instruction[1]);
 	}
 	
+	// implements compare converter to fill the opcode and fills the action codes with the registres to compare 
 	public static void convertforcompare(String[] instruction)
 	{
 		opcode_command = compare;
@@ -272,38 +321,125 @@ public class assembler
 		actioncode2 = converterforregister(instruction[2]);
 	}
 	
+	// implements branch converter to fill the opcode and fills the action codes with cc and signed value of the number 
 	public static void convertforbranch(String[] instruction)
 	{
 		opcode_command = branch;
-		String given_number = converterfornumber(instruction[1]);
-//		System.out.println("branch num: "+ given_number);
+		int num_check = Integer.parseInt(instruction[1]);
+		String given_number = converterfornumber(instruction[1]); //returns the number with 8 bits in it
 		String cc = "";
-		if(instruction[0].equals("branchifequal"))
+		if(num_check>8160)
 		{
-			cc = "110";
-			actioncode1 = cc + given_number;
+			System.out.println("out of bound cant branch sorry");
+			return;
 		}
-		else if(instruction[0].equals("branchifnotequal"))
+		if(num_check>=0) //if entered is positive then Address first num is 0 else 1
 		{
-			cc = "000";
-			actioncode1 = cc + given_number;
+			if(instruction[0].equals("branchifequal"))
+			{
+				cc = "110"; //if equal cc = 11
+				actioncode1 = cc + given_number;
+			}
+			else if(instruction[0].equals("branchifnotequal"))
+			{
+				cc = "000";//if equal cc = 00
+				actioncode1 = cc + given_number;
+			}
+			else if(instruction[0].equals("branchifgreater"))
+			{
+				cc = "100";//if equal cc = 10
+				actioncode1 = cc + given_number;
+			}
+			else if(instruction[0].equals("branchifgreaterthanequal"))
+			{
+				cc = "010";//if equal cc = 01
+				actioncode1 = cc + given_number;
+			}
 		}
-		else if(instruction[0].equals("branchifgreater"))
+		else //if negative num we add first bit of address as -ve
 		{
-			cc = "100";
-			actioncode1 = cc + given_number;
+			if(instruction[0].equals("branchifequal"))
+			{
+				cc = "111";
+				actioncode1 = cc + given_number;
+			}
+			else if(instruction[0].equals("branchifnotequal"))
+			{
+				cc = "001";
+				actioncode1 = cc + given_number;
+			}
+			else if(instruction[0].equals("branchifgreater"))
+			{
+				cc = "101";
+				actioncode1 = cc + given_number;
+			}
+			else if(instruction[0].equals("branchifgreaterthanequal"))
+			{
+				cc = "010";
+				actioncode1 = cc + given_number;
+			}
 		}
-		else if(instruction[0].equals("branchifgreaterandequal"))
-		{
-			cc = "010";
-			actioncode1 = cc + given_number;
-		}
-//		System.out.println(actioncode1);
+		
+		
+//		System.out.println("actioncode1 " + actioncode1);
 	}
 	
+	// converter for call, implements the indexes and opcode for hte call instruction and converts it.
+	public static void convertforcall(String[] instruction)
+	{
+		if(instruction[2] != null  || instruction[3] != null )
+		{	
+			System.out.println("addtional data added, please checkout");
+		}
+		
+		opcode_command = stack;	// adds the stack code in the opcode.
+		int given_index = Integer.parseInt(instruction[1])*8; // takes the index in of the call to jump ahead.
+		String registercode = converterfornumber(instruction[1]); // converts the number into binary
+		
+		if(given_index > 8160) // if its more than the given memory 
+		{
+			System.out.println("out of bound cant call sorry");
+			return; // we break out
+		}
+		else if(given_index >= 0)
+		{
+			actioncode1 = "1000"+registercode; // adds the register code
+		}
+		else if(given_index < 0)
+		{
+			actioncode1 = "1011"+registercode; // adds the register code
+		}
+	}
 	
+	// converter the push 
+	public static void convertforpush(String[] instruction)
+	{
+		opcode_command = stack; // adds the opcode of the stack
+		String registercode = converterforregister(instruction[1]); // register code is converted to the binary code and added to the action code1.
+		actioncode1 = "00000000"+registercode; // sets the actioncode1
+	} 
 	
+	//converter for the pop
+	public static void convertforpop(String[] instruction)
+	{
+		
+		opcode_command = stack; // adds the opcode of the stack
+		String registercode = converterforregister(instruction[1]);// register code is converted to the binary code and added to the action code1.
+		actioncode1 = "01000000"+registercode;// sets the actioncode1
+	}
 	
+	//converter for the return
+	public static void convertforreturn(String[] instruction)
+	{
+		//return only have one parameter
+		if(instruction[1] != null || instruction[2] != null  || instruction[3] != null )
+		{	
+			System.out.println("addtional data added, please checkout");
+		}
+		opcode_command = stack; //opcode
+		actioncode1 = "110000000000"; //actioncode1 for the opcode.
+	}
+
 	
 	//--------------------------------------helpers------------------------------------------
 	// helper to convert the registers

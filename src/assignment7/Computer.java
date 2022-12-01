@@ -7,7 +7,7 @@ public class Computer
      bit bool_check = new bit(true); //setting initial value of the computer as not working == false.
 	
    // private memory member 
-    private Memory member_memory = new Memory();
+     Memory member_memory = new Memory();
      Longword PC = new Longword(0); //LONG WORD PC for the address from memory.
     
     // storage of long words takes 16 longwords.
@@ -34,9 +34,12 @@ public class Computer
      Longword interrupt2 = new Longword(8193); // to print the memory
     
      
+     //stack pointer initialization
+     Longword StackPointer = new Longword(8160);
      
      //comparision code 
      bit[] compare_bit = new bit[2];
+     int callindex = 0; //for the index to go ahead in stack and read
      
     public Computer()
     {
@@ -61,7 +64,7 @@ public class Computer
 	//method fetch : fetches the data from memory to read the operations
 	void fetch() throws Exception
 	{
-//		System.out.println(PC.getsigned());
+		System.out.println("Current pc value: " +  PC.getsigned());
 		currentInstruction = member_memory.read(PC); // sets the current instructions by taking the longword from the memeory.
 		System.out.println("current instruction: "+ currentInstruction.toString());
 		System.out.println();
@@ -97,16 +100,33 @@ public class Computer
 		}
 		else if(opcode[0].getValue() == false && opcode[1].getValue() == false  && opcode[2].getValue() == true && opcode[3].getValue() == true)
 		{
-			int pc_index = currentInstruction.leftshift(4).rightshift(20).getsigned();
-			System.out.println(pc_index);
-			PC = new Longword(pc_index * 8);
-			System.out.println("JUMP is read for given");
-			return;
+			int pc_index = currentInstruction.leftshift(4).rightshift(20).getsigned(); //gets the number of values to move ahead
+			
+			System.out.println("jump by : "+ pc_index); // gives number of registers to move ahead
+//			System.out.println(pc_index); 
+			if(pc_index*8  < 8192) //if the resulting pc is more than memory then it is breakdown
+			{
+				PC = new Longword(pc_index * 8); //every 1 numeric goes to 8 bits once so it will multiply by 8 to move ahead in cycle
+				System.out.println("JUMP is read for given");
+				return;
+			}
+			else //if the resulting pc is more than memory then it is breakdown
+			{
+				System.out.println("out of the memeory bound ...!");
+				return;
+			}
+			
 		}
 		else if(opcode[0].getValue() == false && opcode[1].getValue() == true  && opcode[2].getValue() == false && opcode[3].getValue() == false)
 		{
 			//calls the compare method
 			compare();
+			return;
+		}
+		else if(opcode[0].getValue() == false && opcode[1].getValue() == true  && opcode[2].getValue() == true && opcode[3].getValue() == false)
+		{
+			//calls the compare method
+			stackoperation();
 			return;
 		}
 		else if(opcode[0].getValue() == false && opcode[1].getValue() == true  && opcode[2].getValue() == false && opcode[3].getValue() == true)
@@ -187,6 +207,11 @@ public class Computer
 			//calls the compare method
 			return;
 		}
+		else if(opcode[0].getValue() == false && opcode[1].getValue() == true  && opcode[2].getValue() == true && opcode[3].getValue() == false)
+		{
+			//calls the stack method
+			return;
+		}
 		else if(opcode[0].getValue() == false && opcode[1].getValue() == true  && opcode[2].getValue() == false && opcode[3].getValue() == true)
 		{
 //			if(branch().getValue())
@@ -239,6 +264,11 @@ public class Computer
 		}
 		else if(opcode[0].getValue() == false && opcode[1].getValue() == true  && opcode[2].getValue() == false && opcode[3].getValue() == true)
 		{
+			return;
+		}
+		else if(opcode[0].getValue() == false && opcode[1].getValue() == true  && opcode[2].getValue() == true && opcode[3].getValue() == false)
+		{
+			//calls the stack method
 			return;
 		}
 		//if the opcode is 0010 or 0 or 1 we exit the method as we prompted in decode method.
@@ -324,16 +354,18 @@ public class Computer
 	
 	void compare()
 	{
-		Longword register1;
-		Longword register2;
-		int index1 = currentInstruction.leftshift(8).rightshift(28).getsigned();
-		int index2 = currentInstruction.leftshift(12).rightshift(28).getsigned();
-		register1 = register[index1];
-//		System.out.println(index1);
-		register2 = register[index2];
-//		System.out.println(index2);
+		Longword register1; //register 1 to store register
+		Longword register2; //register 2 to store register 
+		int index1 = currentInstruction.leftshift(8).rightshift(28).getsigned(); //given index1
+		int index2 = currentInstruction.leftshift(12).rightshift(28).getsigned(); //given index2
+		register1 = register[index1]; //  register reteival	1
+//		System.out.println(index1); 
+		register2 = register[index2]; // register retreival 2
+//		System.out.println(index2); 
+		// prompt the user the about the compare result
 		System.out.println("compare  " + rippleAdder.sub(register1, register2));
-		
+		 
+		//if the sub gives less value than 0 then its less than given 
 		if(rippleAdder.sub(register1, register2).getsigned() > 0)
 		{
 			compare_bit[0] = new bit(true);
@@ -342,6 +374,7 @@ public class Computer
 			System.out.println();
 			
 		}
+		//if the sub gives greater value than 0 then its greater than given 
 		else if(rippleAdder.sub(register1, register2).getsigned() < 0) 
 		{
 			compare_bit[0] = new bit(false);
@@ -349,6 +382,7 @@ public class Computer
 			System.out.println("result : less than");
 			System.out.println();
 		}
+		//if the sub gives equal to 0 then given are equal
 		else if(rippleAdder.sub(register1, register2).getsigned() == 0)
 		{
 			compare_bit[0] = new bit(true);
@@ -356,6 +390,7 @@ public class Computer
 			System.out.println("result : equal");
 			System.out.println();
 		}
+		//else it renders greater than equal 
 		else 
 		{
 			compare_bit[0] = new bit(false);
@@ -363,40 +398,85 @@ public class Computer
 			System.out.println("result : greater than or equal");
 			System.out.println();
 		}
-		
-		
 	}
 	
 	
+	//branch method to check the  branch code and say should we add to 
 	bit branch()
 	{
+		
+		if(compare_bit[1] == null) // if there isnt compare before then we return direct false.
+		{
+			System.out.println("No previous compare");
+			return new bit(false);
+		}
 		
 		// cc - 11 , 10, 
 		bit[] cc = new bit[2];
 		
 		cc[0] = currentInstruction.leftshift(4).rightshift(30).getbit(30);
 		cc[1] = currentInstruction.leftshift(4).rightshift(30).getbit(31);
-	
 		
 		//if equals , greater
-		System.out.println();
+		//direct compasrision for greater, equal and less 
 		if(cc[0].getValue() == compare_bit[0].getValue() && cc[1].getValue() == compare_bit[1].getValue())
 		{
-			return new bit(true);
+			return new bit(true);//if that the result then return true
 		}
-//		else if ((cc[0] == new bit(true) && cc[1] == new bit(true)) || (cc[0] == new bit(true) && cc[1] == new bit(false)) && (compare_bit[0] == new bit(false) && compare_bit[0] == new bit(true)))
-//		{
-//			return new bit(true);
-//		}
-//		else if((cc[0] == new bit(false) && cc[1] == new bit(false)) && (compare_bit[0] != new bit(true) && compare_bit[1] != new bit(true)))
-//		{
-//			return new bit(true);
-//		}
+		//if greater than equal
+		else if ((cc[0].getValue() == new bit(false).getValue() && cc[1].getValue() == new bit(true).getValue()) && ((compare_bit[0].getValue() == new bit(true).getValue() && compare_bit[0].getValue() == new bit(false).getValue()) || (compare_bit[0].getValue() == new bit(true).getValue() && compare_bit[0].getValue() == new bit(true).getValue())))
+		{
+			return new bit(true);//if that the result then return true
+		}
+		//if not equal
+		else if((cc[0].getValue() == false && cc[1].getValue() == false) && ((compare_bit[0].getValue() != true || compare_bit[1].getValue() != true)))
+		{
+			return new bit(true); //if that the result then return true
+		}
 		else
 		{
-			return new bit(false);
+			return new bit(false);//if that the result then return false
 		}
 	
+	}
+	
+	// stack 
+	void stackoperation() throws Exception
+	{
+		Longword call = currentInstruction.leftshift(4).rightshift(30);//specially for 10 since the next coming bits are arbitary.
+		Longword stack_instruction = currentInstruction.leftshift(4).rightshift(28); //takes the stack instruction indicating push pop return 
+		System.out.println("stack instruction : " + stack_instruction);
+		//for call 
+		if(call.getbit(30).getValue() == new bit(true).getValue() && call.getbit(31).getValue() == new bit(false).getValue()) // if call
+		{
+			System.out.println("-------------------call------------------------------------");
+			callindex = currentInstruction.leftshift(6).rightshift(22).getsigned();	  //takes the jump index
+			member_memory.write(StackPointer, PC); //writes to the stack
+			StackPointer = rippleAdder.sub(StackPointer, new Longword(32));  // moves stack pointer
+			PC = rippleAdder.add(PC, new Longword((callindex*8)-16));  // jumps the pc value
+		}
+		// if push
+		else if(stack_instruction.getbit(28).getValue() == new bit(false).getValue() && stack_instruction.getbit(29).getValue() == new bit(false).getValue()  && stack_instruction.getbit(30).getValue() == new bit(false).getValue()  && stack_instruction.getbit(31).getValue() == new bit(false).getValue())
+		{
+			 System.out.println("----------------------------push------------------------------");
+			int given_index = currentInstruction.leftshift(12).rightshift(28).getsigned(); //takes R index
+			Longword given = register[given_index]; // retrieves the value of register
+			member_memory.write(StackPointer, given); //writes to the stack
+			StackPointer = rippleAdder.sub(StackPointer, new Longword(32));  // moves stack pointer
+		}
+		else if(stack_instruction.getbit(28).getValue() == new bit(false).getValue() && stack_instruction.getbit(29).getValue() == new bit(true).getValue()  && stack_instruction.getbit(30).getValue() == new bit(false).getValue()  && stack_instruction.getbit(31).getValue() == new bit(false).getValue())
+		{
+			System.out.println("----------------------------pop---------------------------------");
+			int given_index = currentInstruction.leftshift(12).rightshift(28).getsigned();  //takes R index
+			StackPointer = rippleAdder.add(StackPointer, new Longword(32)); // moves stack pointer
+			register[given_index] = member_memory.read(StackPointer);// retrieves the value of register
+			System.out.println("edited register "+given_index+": "+register[given_index]);
+		}
+		else if(stack_instruction.getbit(28).getValue() == new bit(true).getValue() && stack_instruction.getbit(29).getValue() == new bit(true).getValue()  && stack_instruction.getbit(30).getValue() == new bit(false).getValue()  && stack_instruction.getbit(31).getValue() == new bit(false).getValue())
+		{
+			System.out.println("---------------------------return--------------------------------");
+			PC = member_memory.read(rippleAdder.add(new Longword(32), StackPointer)); //gets the skiped index of the PC and gets it back
+		}
 	}
 	
 	
@@ -420,10 +500,11 @@ public class Computer
 	{
     	System.out.println();
     	System.out.println("----------------------whole memory--------------------------- ");
+
 		for(int i = 0; i<256; i++) //reads all the memory and prints the memory 
 		{
 			Longword temp = new Longword(i);
-			System.out.println(member_memory.read(temp).toString()); //every longword address will print 32 bits so we got 256*32 
+			System.out.println(member_memory.read(temp)); //every longword address will print 32 bits so we got 256*32 
 			System.out.println();
 		}
 		System.out.println();
@@ -437,34 +518,86 @@ public class Computer
 		Longword returner = new Longword(0); //empty longword
 		int overall_len_check = 0; //overall check as when we fill 256 overall as every fill will occupy 32
 		
-		//loops over the available strings and checks fills the memeory
-		for(int i = 0; i <= filler.length-2; i = i+2)
+		//if the given have odd number lengths such to handle null during i=i+2
+		if(filler.length % 2 == 1)
 		{
-				String given = filler[i]+filler[i+1]; //pairing up the array for 32 bits
-				ch = given.toCharArray(); //converts it to the char array
-			 for(int j = 0; j < ch.length; j++) //runs through the char array
-			 {
-				 if(ch[j] == '1')
-				 { 
-					 returner.setBit(j, new bit(true)); //if 1 the we fill true
-				 } 
-				 else if(ch[j] == '0')
+			String[] filler1 = new String[filler.length+1];
+			filler1 = Arrays.copyOfRange(filler,0,filler.length+1);
+			
+			//loops over the available strings and checks fills the memeory
+			
+			for(int i = 0; i <= filler1.length-2; i = i+2)
+			{
+				 if(filler1[i+1] == null)
 				 {
-					 returner.setBit(j, new bit(false)); //else it is false
+					 filler1[i+1] = "0000000000000000";
 				 }
-				 else
+				 String given = filler1[i]+filler1[i+1]; //pairing up the array for 32 bits
+				 ch = given.toCharArray(); //converts it to the char array
+				 for(int j = 0; j < ch.length; j++) //runs through the char array
 				 {
-					 continue; //if null we fill with 0 anyway
+					 if(ch[j] == '1')
+					 { 
+						 returner.setBit(j, new bit(true)); //if 1 the we fill true
+					 } 
+					 else if(ch[j] == '0')
+					 {
+						 returner.setBit(j, new bit(false)); //else it is false
+					 }
+					 else
+					 {
+						 continue; //if null we fill with 0 anyway
+					 }
 				 }
-			 }
-			 
-			 if(overall_len_check <= 256)
-			 {
-				 member_memory.write(new Longword(overall_len_check), returner);  // if the current index is less than 256 then it is good to fill else we wont
-				 overall_len_check +=32; //increment by 32 till 256
-			 }
+				 
+				 if(overall_len_check <= 256)
+				 {
+					 member_memory.write(new Longword(overall_len_check), returner);  // if the current index is less than 256 then it is good to fill else we wont
+					 overall_len_check +=32; //increment by 32 till 256
+				 }
+			}
 		}
+		else
+		{
+			
+			//loops over the available strings and checks fills the memeory
+			
+			for(int i = 0; i <= filler.length-2; i = i+2)
+			{
+				 if(filler[i+1] == null)
+				 {
+					 filler[i+1] = "0000000000000000";
+				 }
+				 String given = filler[i]+filler[i+1]; //pairing up the array for 32 bits
+//				 System.out.println(given);
+				 ch = given.toCharArray(); //converts it to the char array
+				 for(int j = 0; j < ch.length; j++) //runs through the char array
+				 {
+					 if(ch[j] == '1')
+					 { 
+						 returner.setBit(j, new bit(true)); //if 1 the we fill true
+					 } 
+					 else if(ch[j] == '0')
+					 {
+						 returner.setBit(j, new bit(false)); //else it is false
+					 }
+					 else
+					 {
+						 continue; //if null we fill with 0 anyway
+					 }
+				 }
+				 
+				 if(overall_len_check <= 256)
+				 {
+					 member_memory.write(new Longword(overall_len_check), returner);  // if the current index is less than 256 then it is good to fill else we wont
+					 overall_len_check +=32; //increment by 32 till 256
+				 }
+			}
+		}
+		
+			
 	}
+
 	
 	
 	//fillregister: fills the register the values, and make the it available for swaps and edits
@@ -485,9 +618,6 @@ public class Computer
 //			
 //			setter.setBit(31 , new bit(true));
 //			
-//			
-//			
-//		
 //	}
 
 }
